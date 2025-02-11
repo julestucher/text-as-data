@@ -14,6 +14,8 @@ I am curious about how queer people use alternative online social media platform
 
 3. A clear description of your corpus and where you plan to access it.
 
+![Lex logo]([http://url/to/img.png](https://play-lh.googleusercontent.com/mgfaPBNpRq-5V0BumBZketO2GNhJFTneFnsxgfAc_ygQfUK0gwenEFjnAVnYDtVmhw))
+
 The corpus will include posts and user profiles from a 100 mile radius of Amherst, MA over the past 3 months. Since there is not a web-version, I will use the software Fiddler Everywhere and an internet proxy to intercept API calls from the app on my mobile device. I will reverse-engineer API calls to pull JSON files in Python.
 
 4. A rationale for the corpus that identifies why it is appropriate for addressing the selected research question.
