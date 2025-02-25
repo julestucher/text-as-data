@@ -1,4 +1,4 @@
-# Lost Connections and Found Communities: A Computational Look at Queer Identity and Interaction on Lex
+# Lost Connections and Found Communities: A Computational Look at Queer Identity and Interaction on Lex in Western Massachusetts
 ### A Text as Data Research Blog
 
 This blog will track the progress and exploration of a research project for DACSS 756: Text as Data.
