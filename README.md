@@ -1,6 +1,88 @@
-# Text as Data: Research Blog
+# Lost Connections and Found Communities: A Computational Look at Queer Identity and Interaction on Lex
+### A Text as Data Research Blog
 
 This blog will track the progress and exploration of a research project for DACSS 756: Text as Data.
+
+## Blog Post 2: Feb 26th, 2024
+
+By reverse engineering an API call from my mobile device, I successfully pulled posts, comments, user profiles, and user groups from the Lex app. I started by pulling posts from my Lex feed, ordered in reverse chronological order. The API call parameters included a location radius and a page number to pull. I pulled 250 pages of posts within a 50-mile radius, which resulted in all posts within a 50-mile radius of Amerherst, MA since March 30th, 2023. Total number of posts collected is 5,051. Each post returned an ID for the post and for the associated user. Using these ID fields and additional API functions `getUser` and `getComments`, I pulled user profiles for all users who posted (1,059 users) and all comments connected to posts (4,975 comments). Furthermore, associated with each user profile are the Lex group chats that active users belong to. The API function `groupsApi/group` retrieved data on 594 groups. Group chat logs are only visible to members, but a description and location are publically available to any user.
+
+My main concern is not having enough data. The average number of tokens across documents in my posts corpus is about 40. I am not interested in increasing the distance radius because I believe that the app's usage varies regionally, especially between cities and more rural areas. By restricting the radius to Western MA, Southern VT, and the Hartford, CT area, I am capturing text from a somewhat local population. Expanding the radius would include Boston and/or New York, which would change the user sample and reduce the proportion of local users in the sample. I could repeat the data collection process and collect more than 250 pages of posts (i.e. more years of posts) if the amount of data is insufficient.
+
+At this point in time, I have two main research questions:
+
+1. What are people in the local area using the platform Lex for? What kinds of community and connections are people seeking and offering? Are users attempting to form connections (friendship, romantinc, activity-based, etc) or as a place to express themselves as individuals (i.e. posting rants, poetry, musings, etc)?
+
+2. How do queer people use Lex to express themselves and identify online? Specifically, what identity-based language is used on the platform and how might it differ from mainstream identity-based language?
+
+Basic summary statistics from the corpus, describing characteristics of the text. Ideas for this would include top features, document counts, or different patterns related to the metadata associated with the corpus.
+
+A brief exploration of the main post metadata attributes reveals the following distribution of post type. Notably, only the first two pages of posts returned any advertisements, which is consistent with the in-app experience (after about 50 posts, ads disappear).
+
+|     Category | Freq |
+|--------------|------|
+| advertisement| 21   |
+|group-promotion | 65 |
+| missedConnection | 125 |
+| personal | 4840 |
+
+Furthermore, about half of the posts in the dataset are tagged with official Lex tags, which appear with the following frequency:
+
+|                     Tag  | Freq |
+|--------------------------|------|
+|                community | 720  |
+|                  friends | 444  |
+|                    event | 385  |
+|                   hookup | 296  |
+|                   dating | 252  |
+|                      iso | 241  |
+|                   random | 176  |
+|                      t4t | 166  |
+|                 new-here | 148  |
+|                     vent | 144  |
+|                   advice | 141  |
+|        missed-connection | 125  |
+|                      art | 100  |
+|                    music | 92   |
+|                  housing |  90  |
+|                    group |  65  |
+|           lex-after-dark |  58  |
+|                 for-free |  53  |
+|              pride-plans |  44  |
+|                hot-takes |  41  |
+|                    bipoc |  24  |
+|               nightstand |  24  |
+|             summer-fling |  10  | 
+ 
+Finally, users posted from the following nearby locations, with Northampton as the most common location:
+
+| Location | Freq |
+|----------|------|
+|Northampton, MA|	1394	|		
+|Amherst, MA|	552			|
+|Easthampton, MA|	405	|		
+|Holyoke, MA|	383			|
+|Greenfield, MA|	367	|		
+|Springfield, MA|	248		|	
+|Montague, MA|	152			|
+|Belchertown, MA|	118		|	
+|South Hadley, MA|	116		|	
+|Chicopee, MA|	108	|
+
+After removing common English stop words and punctuation, the top 20 features of the post corpus are as follows.
+
+```
+looking   queer    just  anyone    like     can    want     get    know    need    love     new  people 
+    849     812     748     744     736     698     665     615    527     518     498     494     452 
+friends   trans      go    make someone    time    come 
+    436     410     399     394     380     360     359
+```
+
+The top 50 most frequent words in the posts corpus can also be visualized in a word cloud.
+![word cloud](/img/wordcloud1.png)
+
+I also created a smalled document feature matrix that included only the 30 most frequnetly occurring words to create a feature co-occurence matrix. Below is the resulting textplot network of this 30-element feature network.
+![word cloud](/img/fcm_network.png)
 
 ## Blog Post 1: Feb 12th, 2024
 
