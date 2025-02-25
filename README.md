@@ -79,7 +79,7 @@ friends   trans      go    make someone    time    come
 ```
 
 The top 50 most frequent words in the posts corpus can also be visualized in a word cloud.
-![word cloud](/img/wordcloud1.png)
+![word cloud](/img/worldcloud1.png)
 
 I also created a smalled document feature matrix that included only the 30 most frequnetly occurring words to create a feature co-occurence matrix. Below is the resulting textplot network of this 30-element feature network.
 ![word cloud](/img/fcm_network.png)
