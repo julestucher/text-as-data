@@ -3,6 +3,52 @@
 
 This blog will track the progress and exploration of a research project for DACSS 756: Text as Data.
 
+## Blog Post 3: Mar 26th, 2024
+
+To address some of the concerns in my previous blog post, I repeated my data collection methods over a longer period of time. I retained the 50-mile radius constraint, but collected as many posts as I could without receiving a refresh error. This was in total 730 pages of posts, or 14,594 total posts that date back to June 2021.
+
+Because my data was collected in R, the data is stored locally on my device in an RDS data file, so loading it into a new R script was trivial. I completed several data cleaning steps before attempting any analysis, but I am curious how additional pre-processing steps would improve my results. First, I filtered out posts with `type == "advertisement"` because I only want to include user-generated content in my corpus. Then, I removed common English stopwords. I have some concerns that domain-specific stopwords will later need to be removed, but for now, I am just removing common English stopwords. I also set the `remove_symbols` paramter to `True` because I noticed that emoji usage seemed quite common.
+
+During my initial data cleaning process, I noticed many spelling inconsistencies and errors across users' posts. I have found that users of Tiktok and other social media platforms have become concerned that their content will get "shadowbanned" (deprioritized and hidden from viewers by the algorithm that disseminates content) due to use of innaprorpriate language (drug references, sexual content, etc). In response, users will replace letters with numbers (i.e. w33d instead of weed) or use alternate spellings (i.e. jenohside instead of genocide). This poses a unique challenge for text-as-data analysis because these replacements are not consistent and difficult to computationally ingest. I noticed some of the posts in my dataset using these filter-avoiding spellings, but for now, alternate spellings of words or phrases will be considered as separate words in the document feature matrix.
+
+To being exploring my data, I was curious about the topics underlying the posts in my corpus. I used the `text2vec` package to tokenize the post corpus. I then created an token iterator object to create a vocabulary. I then pruned the vocabulary to only include words that were in at least 10 documents and in no more than 5% of posts. With `n_topics` set to 10, the top 10 words in each topic are as follows:
+
+The below sample document has the following distribution of topics. We can see a throughline between the topic that includes words related to housing requests (topic 7) and the topic with the highest proportion in the sample text:
+
+```
+Putting out a feeler… If anyone is looking for a roommate starting this summer and extending until  next year, I am also looking :) Would love to find a place in the surrounding WMass area that is clean and quiet. I can tell you more about myself, just DM :)) 
+```
+![bar_plot](/img/lda_barplot.png)
+
+Moving on to address my first research question, I found that a small portion of the posts in my corpus have been tagged by the user. Here is an updated table of tag counts in my updated corpus:
+
+|                     Tag  | Freq |
+|--------------------------|------|
+|                community | 1199  |
+|                  friends | 969  |
+|                    event | 591  |
+|                   hookup | 524  |
+|                   dating | 505  |
+|                  new-here | 418  |
+|                   missed-connection | 395  |
+|                      random | 393  |
+|                 iso | 356  |
+|                     t4t | 326  |
+				
+I noted that of the top 5 most prevalent tags, there are two primary categories: dating and community. Because the text-based app is billed as an app for queer people to make connections, we expect to see users interested in both romantic- and community-oriented types of connections. Since only 32% of posts are tagged, this does not help us answer questions about usage overall. However, if we train a supervised learning model on the user-tagged data, we could apply this model to the untagged data and get a sense of trends across the entire corpus, as well as words that are commonly associated with community and dating on the app. 
+
+Since the supervised learning models we have explored so far require a binary outcome, I recategorized the top 5 tags into either community (community, friends, event) or dating (dating, hookups). Posts tagged with any other tags or not tagged at all were pulled out as hold out data. This left 2,603 posts to create our training and test splits. Because community-based posts are overrepresented in the corpus, I created a test set by undersampling the community posts and oversampling the dating posts with replacement. Finally, I fit a Naive Bayes model to the training data to estimate the new tag variable ("theme"). The `summary` command provided 50% probability for the class priors, as well as estimated feature scores for features in the first two posts:
+
+![nb_model](/img/naive_bayes_model.png)
+
+I noted that some features were scored much higher in community posts--small, anyone, and friends-- while other features scored much higher in dating posts--someone, likes, and wanna. I used the test set of user-tagged posts to create a confusion matrix and assess how well the model would perform on unseen data.
+
+![conf_matrix](/img/nb_conf_matrix.png)
+
+First note the class imbalance in the test set, where community posts are much more prevalent. However, the model correctly classifies 93% of posts, with a no information rate of 85%. Overall, this model performs okay, although it does not include the complexities of topics covered in user posts. It performs well enough that I was interested to see how it would handle the hold out data. Of 11,971 untagged posts, the Naive Bayes model predicted 80.4% of them were community posts, which is 4 percentage points higher than the labeled sample. This makes sense because the mean predicted probability of community posts was 84.7%, meaning that the model will much more often predict that a post is community-based than dating, which is consistent with base sample probabilities. I would be curious better ways to evaluate the model's performance on the hold out data.
+
+In the next steps, I would like to return to unsupervised clustering methods and see if I can get a model to converge. I would also be interested in exploring structural topic models to see if there are better topics present in the data. It may also be prudent to return to the data cleaning steps and eliminate additional stop words or experiment with n-grams, as there are many small words that could be useful to combine ro local phrases that could get picked up by n-grams. Finally, to continue using supervised learning strategies, it would be useful to fit a multinomial model that could capture more than two post categories to include people looking for resources/support, using the app for self-expression, and whatever other use cases.
+
 ## Blog Post 2: Feb 26th, 2024
 
 By reverse engineering an API call from my mobile device, I successfully pulled posts, comments, user profiles, and user groups from the Lex app. I started by pulling posts from my Lex feed, ordered in reverse chronological order. The API call parameters included a location radius and a page number to pull. I pulled 250 pages of posts within a 50-mile radius, which resulted in all posts within a 50-mile radius of Amherst, MA since March 30th, 2023. Total number of posts collected is 5,051. Each post returned an ID for the post and for the associated user. Using these ID fields and additional API functions `getUser` and `getComments`, I pulled user profiles for all users who posted (1,059 users) and all comments connected to posts (4,975 comments). Furthermore, associated with each user profile are the Lex group chats that active users belong to. The API function `groupsApi/group` retrieved data on 594 groups. Group chat logs are only visible to members, but a description and location are publically available to any user.
