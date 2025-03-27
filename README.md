@@ -13,6 +13,8 @@ During my initial data cleaning process, I noticed many spelling inconsistencies
 
 To being exploring my data, I was curious about the topics underlying the posts in my corpus. I used the `text2vec` package to tokenize the post corpus. I then created an token iterator object to create a vocabulary. I then pruned the vocabulary to only include words that were in at least 10 documents and in no more than 5% of posts. With `n_topics` set to 10, the top 10 words in each topic are as follows:
 
+![lda_categories](/img/lda_categories.png)
+
 The below sample document has the following distribution of topics. We can see a throughline between the topic that includes words related to housing requests (topic 7) and the topic with the highest proportion in the sample text:
 
 ```
