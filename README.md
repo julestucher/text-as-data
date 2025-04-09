@@ -9,26 +9,31 @@ This blog will track the progress and exploration of a research project for DACS
 
 In my previous blog post, I summarized my second wave of data collection, as well as initial attempts at answering my first research question using LDA and Naive Bayes. My research questions for this project are:
 
-	1. 
+	1. What are seeking from and offering to their queer and LGBT community on the alternative social media platform Lex?
+ 
+ 	2. What language do queer and LGBT people use to describe themselves in queer-only spaces, and does it differ from mainstream references to queer/LGBT people?
+
+Both research questions center the data I have collected from the social media app [Lex](https://www.lex.lgbt/). The app is billed as by the queer community for the queer community to dicover events and make connections with people in their local communities. My scraped dataset includes almost 15,000 text-based posts from 3,032 users. 
 
 To answer my first research question, I am interested in using a combination of supervized and unsupervized machine learning methods to explore tagged and latent categories in text posts. Since users have the option to add tags to their posts, a subset of the post corpus is user-labeled. By training supervized models on this labeled data, we can predict what categories of posts are most prevalent in the untagged data.
 
-To answer my second research question, 
+To answer my second research question, I will use text extracted from the `About Me` section of the users' profiles. I plan to use unsupervized models to review any latent categories in user self-identification. I also hope to apply word embedding models to explore semantic meaning and differences of self-identification words. 
 
 I am also very motivated to quantify and understand what topics each user is posting about on the platform as it connects to my research project for Professor Song's Network Inference class. In that project, I am exploring the likelihood that users comment on each other's posts, and being able to classify latent topics and themes for each user could help me explore whether or not shared topic interest is a predictor for tie formation in the network.
 
-In the two weeks since then, I have looked for examples of research that uses text-as-data approaches to social media comments to understand best practices as well as what techniques have not yet been applied. Since there is no existing research that uses the Lex app as a source for data, I have to make connections to how researchers have used other, similar sources (tweets, YouTube comments, etc).
-
+In the two weeks since my last blog post, I have also looked for examples of research that uses text-as-data approaches to social media comments to understand best practices as well as what techniques have not yet been applied. Since there is no existing research that uses the Lex app as a source for data, I have to make connections to how researchers have used other, similar sources (tweets, YouTube comments, etc).
 
 3. Your findings so far. What are the most compelling takeaways from your work at this point?
 
-Metadata descriptive statistics. Northampton has the highest number of users and posts. "Community" is the most often used post tag, followed by "Friends" and "Events".
+The metadata offers some descriptive statistics. Northampton has the highest number of users and posts. The inner quantile of users' age is 24-34. Almost all users have self-identified on their profiles that they are looking for friends and community. `Community` is the most often used post tag, followed by `friends` and `events`.
 
-Findings from LDA. Categories associated with looking for housing, advertizing events happening, and people looking for people to meet up with and talk to. Thus far, I have only applied text methods to the post-based corpus and have not explored the comments or user profiles. In my initial blog post, I expressed interested in answering the research question: "How are local queer and LGBT people self-identifying on the alternative social media platform Lex?". I am still interested in investigating this question, so I have begun to clean and create a text corpus from the user profile data. With this data set, each document represents the text found on a user's Lex profile, subset to the relevant sections: About Me, pronouns, gender identify, sexuality, and relationship style. LDA on user data. Categories that include sexual/relationship style preferences, but also dis/ability status and hobbies.
+Findings from LDA. Discernable categories were associated with looking for housing, advertizing events happening, and people looking for people to meet up with and talk to. Thus far, I have only applied text methods to the post-based corpus and have not explored the comments or user profiles. In my initial blog post, I expressed interested in answering the research question: "How are local queer and LGBT people self-identifying on the alternative social media platform Lex?". I am still interested in investigating this question, so I have begun to clean and create a text corpus from the user profile data. With this data set, each document represents the text found on a user's Lex profile, subset to the relevant sections: About Me, pronouns, gender identify, sexuality, and relationship style. LDA on user data. Categories that include sexual/relationship style preferences, but also dis/ability status and hobbies.
 
-Naive Bayes. Predict that around 80% of posts could be appropriately tagged as "community" posts. Naive Bayes can also be fit to a multinomial categorical outcome instead of a binary outcome. So, instead of collapsing the most common tags to a community/dating binary, I split out the top 7 most common tags: community, dating, event, friends, hookup, missed-connection, and new-here.  
+In my last blog post, I described a supervized Naive Bayes model that predicted around 80% of posts could be appropriately tagged as `community` posts, as opposed to `dating` posts. Obviously, the `community-dating` polarity is a falsely imposed binary on the source data. However, Naive Bayes can also be fit to a multinomial categorical outcome instead of a binary outcome. So, instead of collapsing the most common tags to a community/dating binary, I split out the top 7 most common tags: community, dating, event, friends, hookup, missed-connection, and new-here. One issue with this model is that posts can have multiple tags and belong to more than one category. In my pre-processing, I let less frequent tags dictate the outcome variable (i.e. if post is tagged with community and event, the outcome variable tag would be set to event). The Naive Bayes model trained on this multinomial version of the tags variable has an accuracy of 56.1% across the 7 categories, an improvement of almost 20 points on the no-information rate of 38%. 
 
-I extracted the top 10 row-normalized feature estimates for each of the 7 categories, displayed below (hookup excluded for profanity's sake):
+The below confusion rate from the Naive Bayes model shows that `community` posts are most often misclassified as `event` or `friends` posts, `dating` posts are most often misclassified as `friends` posts, and `hookup` posts are more often misclassified as `dating` or `friends` posts than correctly classied. 
+
+I also extracted the feature estimates for all features in the Naive Bayes model. Then, row-normalized the estimates to provide a measure of which features stand out as distinct predictors of each category. Without normalization, top estimates show very commonly used words in the corpus. The top 10 row-normalized feature estimates for each of the 7 categories are displayed below (hookup excluded for profanity's sake):
 
 | community | dating | event | friends | missed-connection | new-here |
 |----------|----------|-------|--------|-------------------|----------|
@@ -43,9 +48,13 @@ I extracted the top 10 row-normalized feature estimates for each of the 7 catego
 |roommate|relationships|masks|lonely|dark|paganism|
 |recommendations|valentine's|scale|buddies|gas|martin|
 
+Interestingly, since housing is not included as one of the top 7 tags, `housing` and `roommate` make it into the top predictors for `community`. Other top `community` feature estimates relate to mutual aid requests and resource recommendations. Top features for `dating` that are less related to the other categories are fairly straightforward, and we note relationship type (`poly`) as the top feature with a different lemma from the category word. This category reveals that the dataset may benefit from some lemmatization in the preprocessing steps. Top features that distinguish the `event` category include times and place (`10forward` and `saloon` are both references to local queer venues). Features that distinguish the `friends` tag are mostly synonymous with friends: pals, buddy, buddies. In the top `new-here` features, we get a sense of people introducing themselves, their identities, and hobbies.
+
 4. Your plan for the final project. What remains to be done? What approach are you planning for the final project, and what issues are your most concerned about heading into the stretch run?
 
 For the final project, I would like to present exploration of both of my research questions in a poster format. 
+
+Structural topic modeling and clustering to find better latent categories. Since SVM can only be used to predict binary outcomes, train multiple SVM using one-hot outcomes for each of the top tags in the data.
 
 Use of word embeddings to find similarities or relationships between identity words that users use to describe themselves. 
 
