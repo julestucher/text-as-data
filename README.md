@@ -3,9 +3,55 @@
 
 This blog will track the progress and exploration of a research project for DACSS 756: Text as Data.
 
-## Blog Post 3: Mar 26th, 2024
+## Blog Post 4: Apr 9th, 2025
 
-In my third blog post, I will address updates to my corpus, initial data cleaning steps and realizations about data limitations, and results from priliminary unsupervised and supervised learing models. As a refresher, last month I collected text-based posts from the LGBT alternative social media app Lex to explore what queer people in the local area using the platform for. My primary research question is: What kinds of community and connections are people seeking and offering?
+1. A summary of your research progress, noting your research question, your dataset, and how you are addressing your question.
+
+In my previous blog post, I summarized my second wave of data collection, as well as initial attempts at answering my first research question using LDA and Naive Bayes. My research questions for this project are:
+
+	1. 
+
+To answer my first research question, I am interested in using a combination of supervized and unsupervized machine learning methods to explore tagged and latent categories in text posts. Since users have the option to add tags to their posts, a subset of the post corpus is user-labeled. By training supervized models on this labeled data, we can predict what categories of posts are most prevalent in the untagged data.
+
+To answer my second research question, 
+
+I am also very motivated to quantify and understand what topics each user is posting about on the platform as it connects to my research project for Professor Song's Network Inference class. In that project, I am exploring the likelihood that users comment on each other's posts, and being able to classify latent topics and themes for each user could help me explore whether or not shared topic interest is a predictor for tie formation in the network.
+
+In the two weeks since then, I have looked for examples of research that uses text-as-data approaches to social media comments to understand best practices as well as what techniques have not yet been applied. Since there is no existing research that uses the Lex app as a source for data, I have to make connections to how researchers have used other, similar sources (tweets, YouTube comments, etc).
+
+
+3. Your findings so far. What are the most compelling takeaways from your work at this point?
+
+Metadata descriptive statistics. Northampton has the highest number of users and posts. "Community" is the most often used post tag, followed by "Friends" and "Events".
+
+Findings from LDA. Categories associated with looking for housing, advertizing events happening, and people looking for people to meet up with and talk to. Thus far, I have only applied text methods to the post-based corpus and have not explored the comments or user profiles. In my initial blog post, I expressed interested in answering the research question: "How are local queer and LGBT people self-identifying on the alternative social media platform Lex?". I am still interested in investigating this question, so I have begun to clean and create a text corpus from the user profile data. With this data set, each document represents the text found on a user's Lex profile, subset to the relevant sections: About Me, pronouns, gender identify, sexuality, and relationship style. LDA on user data. Categories that include sexual/relationship style preferences, but also dis/ability status and hobbies.
+
+Naive Bayes. Predict that around 80% of posts could be appropriately tagged as "community" posts. Naive Bayes can also be fit to a multinomial categorical outcome instead of a binary outcome. So, instead of collapsing the most common tags to a community/dating binary, I split out the top 7 most common tags: community, dating, event, friends, hookup, missed-connection, and new-here.  
+
+I extracted the top 10 row-normalized feature estimates for each of the 7 categories, displayed below (hookup excluded for profanity's sake):
+
+| community | dating | event | friends | missed-connection | new-here |
+|----------|----------|-------|--------|-------------------|----------|
+|housing|date|sign|☁️|seconds|alex|
+|tattoo|dates|7pm|friends|westfarms|name's|
+|boxes|dating|7|gym|lantern|binge|
+|resources|poly|drag|pals|foods|sims|
+|wix|serious|doors|buddy|seemed|mich|
+|barber|romance|18|become|didn't|latina|
+|harm|fall|10forward|chess|seem|weeb|
+|pca|likes|saloon|i've|y'all|✌🏻|
+|roommate|relationships|masks|lonely|dark|paganism|
+|recommendations|valentine's|scale|buddies|gas|martin|
+
+4. Your plan for the final project. What remains to be done? What approach are you planning for the final project, and what issues are your most concerned about heading into the stretch run?
+
+For the final project, I would like to present exploration of both of my research questions in a poster format. 
+
+Use of word embeddings to find similarities or relationships between identity words that users use to describe themselves. 
+
+## Blog Post 3: Mar 26th, 2025
+
+In my third blog post, I will address updates to my corpus, initial data cleaning steps and realizations about data limitations, and results from priliminary unsupervised and supervised learing models. As a refresher, last month I collected text-based posts from the LGBT alternative social media app Lex to explore what queer people in the local area using the platform for. My primary research question is: What kinds of community and connections are people seeking and offering on Lex?
 
 In my previous data collection effort, I was concerned about having too little data to work with. So, I repeated my data collection methods over a longer period of time. I retained the 50-mile radius constraint, but collected as many posts as I could without receiving a refresh error. This was in total 730 pages of posts, or 14,594 total posts that date back to June 2021. Although I also collected text from comments and user profiles, for this blog post I will be focusing on the post data which makes up the bulk of the text-based content on the app.
 
@@ -53,7 +99,7 @@ First note the class imbalance in the test set, where community posts are much m
 
 In the next steps, I would like to return to unsupervised clustering methods and see if I can get a model to converge. I would also be interested in exploring structural topic models to see if there are better topics present in the data. It may also be prudent to return to the data cleaning steps and eliminate additional stop words or experiment with n-grams, as there are many small words in the corpus that may be part of significant phrases of interest. Finally, to continue using supervised learning strategies, it would be useful to fit a multinomial model that could capture more than two post categories to include people looking for resources/support, using the app for self-expression, and whatever other use cases.
 
-## Blog Post 2: Feb 26th, 2024
+## Blog Post 2: Feb 26th, 2025
 
 By reverse engineering an API call from my mobile device, I successfully pulled posts, comments, user profiles, and user groups from the Lex app. I started by pulling posts from my Lex feed, ordered in reverse chronological order. The API call parameters included a location radius and a page number to pull. I pulled 250 pages of posts within a 50-mile radius, which resulted in all posts within a 50-mile radius of Amherst, MA since March 30th, 2023. Total number of posts collected is 5,051. Each post returned an ID for the post and for the associated user. Using these ID fields and additional API functions `getUser` and `getComments`, I pulled user profiles for all users who posted (1,059 users) and all comments connected to posts (4,975 comments). Furthermore, associated with each user profile are the Lex group chats that active users belong to. The API function `groupsApi/group` retrieved data on 594 groups. Group chat logs are only visible to members, but a description and location are publically available to any user.
 
@@ -130,7 +176,7 @@ The top 50 most frequent words in the posts corpus can also be visualized in a w
 I also created a smalled document feature matrix that included only the 30 most frequnetly occurring words to create a feature co-occurence matrix. Below is the resulting textplot network of this 30-element feature network.
 ![word cloud](/img/fcm_network.png)
 
-## Blog Post 1: Feb 12th, 2024
+## Blog Post 1: Feb 12th, 2025
 
 Hi everyone, my name is Jules Tucher (they/them), and I'm a second-semester DACSS student. I graduated from Williams College with a degree in Math and Computer Science and an interest in applying data analysis skills to tackle social problems. I wrote an undergraduate honors thesis on Teacher-Student Race Match in California public schools, which looked at the association between school characteristics and the probability of students sharing a racial-ethnic identity with their teachers. I worked for two years as a Data Analyst at Mathematica Policy Research where I gained skills in statistical programming (R, Stata, and Python), data visualization (RShiny, Tableau), and project management. Last semester, I enjoyed working on a data engineering project about MA state election results on Question 2, which eliminates the MCAS graduation requirement for high school students, and a 602 research experiment about how factual information about gender-affirming healthcare for transgender minors impacts support for puberty blockers. I also wrote two research proposals, one for a research project looking at the association between exercise behaviors, gender-affirming care, and gender dysphoria among transmasculine individuals and an evaluation proposal for the Veritas Prep Early College gateway examination process. These projects represent my interest in K-12 education, Massachusetts policy issues, LGBT representation, and the experiences of transgender people.
 
