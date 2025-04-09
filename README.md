@@ -5,13 +5,11 @@ This blog will track the progress and exploration of a research project for DACS
 
 ## Blog Post 4: Apr 9th, 2025
 
-1. A summary of your research progress, noting your research question, your dataset, and how you are addressing your question.
-
 In my previous blog post, I summarized my second wave of data collection, as well as initial attempts at answering my first research question using LDA and Naive Bayes. My research questions for this project are:
 
-	1. What are seeking from and offering to their queer and LGBT community on the alternative social media platform Lex?
+1. What are seeking from and offering to their queer and LGBT community on the alternative social media platform Lex?
  
- 	2. What language do queer and LGBT people use to describe themselves in queer-only spaces, and does it differ from mainstream references to queer/LGBT people?
+2. What language do queer and LGBT people use to describe themselves in queer-only spaces, and does it differ from mainstream references to queer/LGBT people?
 
 Both research questions center the data I have collected from the social media app [Lex](https://www.lex.lgbt/). The app is billed as by the queer community for the queer community to dicover events and make connections with people in their local communities. My scraped dataset includes almost 15,000 text-based posts from 3,032 users. 
 
@@ -21,11 +19,9 @@ To answer my second research question, I will use text extracted from the `About
 
 I am also very motivated to quantify and understand what topics each user is posting about on the platform as it connects to my research project for Professor Song's Network Inference class. In that project, I am exploring the likelihood that users comment on each other's posts, and being able to classify latent topics and themes for each user could help me explore whether or not shared topic interest is a predictor for tie formation in the network.
 
-In the two weeks since my last blog post, I have also looked for examples of research that uses text-as-data approaches to social media comments to understand best practices as well as what techniques have not yet been applied. Since there is no existing research that uses the Lex app as a source for data, I have to make connections to how researchers have used other, similar sources (tweets, YouTube comments, etc).
+In the two weeks since my last blog post, I have also looked for examples of research that uses text-as-data approaches to social media comments to understand best practices for handling documents of this length and scope. Since there is no existing research that uses the Lex app as a source for data, I have to make connections to how researchers have used other, similar sources (tweets, YouTube comments, etc). Of the articles I read, many of them used sentiment analysis to assign positive-negative connotation to comments. I tried to apply several sentiment dictionaries to my project's corpus, but found that the setiment scores applied had little accuracy or relevance. [Hansen, et al.] (https://www.tandfonline.com/doi/full/10.1080/17430437.2022.2028774) used manual thematic analysis to look at responses to an anti-homophobia campaign on Twitter. While it could be fruitful to have human-coded themes, because a proportion of the source text has been tagged by users, manual thematic analysis is not in the scope of this project. [Singh, et al.] (https://ieeexplore.ieee.org/abstract/document/10796526) use social media interactions in their corpus to predict mental health outcomes using a multinomial Naive Bayes model. Since details about how their outcome variable became attached to their social media data, I did not gain insights on how to extract features, but it was useful to see an example of a multinomial Naive Bayes model, which I will explore shortly.
 
-3. Your findings so far. What are the most compelling takeaways from your work at this point?
-
-The metadata offers some descriptive statistics. Northampton has the highest number of users and posts. The inner quantile of users' age is 24-34. Almost all users have self-identified on their profiles that they are looking for friends and community. `Community` is the most often used post tag, followed by `friends` and `events`.
+As for my findings thus far, the metadata offers some descriptive statistics. Northampton has the highest number of users and posts. The inner quantile of users' age is 24-34. Almost all users have self-identified on their profiles that they are looking for friends and community. `Community` is the most often used post tag, followed by `friends` and `events`.
 
 Findings from LDA. Discernable categories were associated with looking for housing, advertizing events happening, and people looking for people to meet up with and talk to. Thus far, I have only applied text methods to the post-based corpus and have not explored the comments or user profiles. In my initial blog post, I expressed interested in answering the research question: "How are local queer and LGBT people self-identifying on the alternative social media platform Lex?". I am still interested in investigating this question, so I have begun to clean and create a text corpus from the user profile data. With this data set, each document represents the text found on a user's Lex profile, subset to the relevant sections: About Me, pronouns, gender identify, sexuality, and relationship style. LDA on user data. Categories that include sexual/relationship style preferences, but also dis/ability status and hobbies.
 
@@ -52,13 +48,7 @@ I also extracted the feature estimates for all features in the Naive Bayes model
 
 Interestingly, since housing is not included as one of the top 7 tags, `housing` and `roommate` make it into the top predictors for `community`. Other top `community` feature estimates relate to mutual aid requests and resource recommendations. Top features for `dating` that are less related to the other categories are fairly straightforward, and we note relationship type (`poly`) as the top feature with a different lemma from the category word. This category reveals that the dataset may benefit from some lemmatization in the preprocessing steps. Top features that distinguish the `event` category include times and place (`10forward` and `saloon` are both references to local queer venues). Features that distinguish the `friends` tag are mostly synonymous with friends: pals, buddy, buddies. In the top `new-here` features, we get a sense of people introducing themselves, their identities, and hobbies.
 
-4. Your plan for the final project. What remains to be done? What approach are you planning for the final project, and what issues are your most concerned about heading into the stretch run?
-
-For the final project, I would like to present exploration of both of my research questions in a poster format. 
-
-Structural topic modeling and clustering to find better latent categories. Since SVM can only be used to predict binary outcomes, train multiple SVM using one-hot outcomes for each of the top tags in the data.
-
-Use of word embeddings to find similarities or relationships between identity words that users use to describe themselves. 
+For the final project, I would like to present exploration of both of my research questions in a poster format, with findings for both of my research questions. Over the next few weeks, I will continue to refine the methods applied to my data, as well as explore additional preprocessing steps. Due to limitations with the user-applied tags being non-exlusive categories, I plan to add a preprocessing step that creates a binary variable for the presence of each of the most popular tags. Then, I can experiment with SVM and Naive Bayes classifiers using these one-hot outcomes. I will also expand my usage of unsupervised methods such as structural topic modeling to find better latent categories, using both the user-tagged training data and the machine-predicted tags as structured elements in the model. This strategy will hopefully reveal what topics folks are discussing under each tag. It could also reveal any patterns in data that is untagged by users. A final step on my exploration of my first research question would be to include a temporal element to the latent classifier to see if any recent local or national events have had an impact on online discourse. To continue exploring my second research question, I plan to use word embeddings to find similarities or relationships between identity words that users use to describe themselves. 
 
 ## Blog Post 3: Mar 26th, 2025
 
